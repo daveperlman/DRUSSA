@@ -1,0 +1,1035 @@
+<!DOCTYPE HTML>  
+<html manifest="http://www.drussa.mobi/manifest.appcache">   
+ 
+	<head>    
+	
+	    	<meta charset='utf-8' />  
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta description="The DRUSSA App for mobile networking">
+		<meta itemprop="The DRUSSA App for mobile networking">
+
+	    	<title>DRUSSA</title>  
+
+		<link rel="shortcut icon" href="http://www.drussa.mobi/drussa.ico" type="image/x-icon" />
+
+		<link rel="stylesheet" href="http://www.drussa.mobi/jQueryMobile.css" />
+		<link rel="stylesheet"  href="http://www.drussa.mobi/fullcalendar.css" />
+		<link rel="stylesheet" href="http://www.drussa.mobi/coffee.css" />
+	 
+		<!-- <script src="http://www.drussa.mobi/json2.js"></script> --> 
+		<!-- <script src="http://www.drussa.mobi/jquery.json-2.3.min.js"></script> -->
+
+		<script src="http://www.drussa.mobi/jQuery.js"></script>
+		<script src="http://www.drussa.mobi/jQueryMobile.js"></script>
+		<script src="http://www.drussa.mobi/jStorage.js"></script> 
+		<script src="http://www.drussa.mobi/md5.js"></script>  
+		<script src="http://www.drussa.mobi/fullcalendar.js"></script> 
+		<script src="http://www.drussa.mobi/drussa.js"></script> 
+
+		<!-- <script src="http://www.drussa.mobi/twitterwidgets.js"></script> --> 
+		<!-- <script src="http://www.drussa.mobi/linkedin.js"></script> -->
+		<!-- <script  type="text/javascript" src="http://platform.twitter.com/widgets.js"></script> -->
+		<!-- <script src="http://platform.linkedin.com/in.js"></script> -->
+
+
+		<script>
+
+
+			// Check if a new cache is available on page load.
+			window.addEventListener('load', function(e) {
+		
+				window.applicationCache.addEventListener('updateready', function(e) {
+			    		if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+			      			// Browser downloaded a new app cache.
+			      			// Swap it in and reload the page to get the new hotness.
+			      			window.applicationCache.swapCache();
+			      			if (confirm('A new version of this app is available. Load it?')) {
+			        			window.location.reload();
+			      			}
+			    		} else {
+			      			// Manifest didn't changed. Nothing new to server.
+			    		}
+			  	}, false);
+			
+			}, false);
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Convenience array of status values
+var cacheStatusValues = [];
+ cacheStatusValues[0] = 'uncached';
+ cacheStatusValues[1] = 'idle';
+ cacheStatusValues[2] = 'checking';
+ cacheStatusValues[3] = 'downloading';
+ cacheStatusValues[4] = 'updateready';
+ cacheStatusValues[5] = 'obsolete';
+
+ // Listeners for all possible events
+ var cache = window.applicationCache;
+ cache.addEventListener('cached', logEvent, false);
+ cache.addEventListener('checking', logEvent, false);
+ cache.addEventListener('downloading', logEvent, false);
+ cache.addEventListener('error', logEvent, false);
+ cache.addEventListener('noupdate', logEvent, false);
+ cache.addEventListener('obsolete', logEvent, false);
+ cache.addEventListener('progress', logEvent, false);
+ cache.addEventListener('updateready', logEvent, false);
+
+ // Log every event to the console
+ function logEvent(e) {
+     var online, status, type, message;
+     online = (isOnline()) ? 'yes' : 'no';
+     status = cacheStatusValues[cache.status];
+     type = e.type;
+     message = 'online: ' + online;
+     message+= ', event: ' + type;
+     message+= ', status: ' + status;
+     if (type == 'error' && navigator.onLine) {
+         message+= ' There was an unknown error, check your Cache Manifest.';
+     }
+     log('     '+message);
+ }
+
+ function log(s) {
+    console.log(s);
+ }
+
+ function isOnline() {
+     return navigator.onLine;
+ }
+
+ if (!$('html').attr('manifest')) {
+    log('No Cache Manifest listed on the  tag.')
+ }
+
+ // Swap in newly download files when update is ready
+// cache.addEventListener('updateready', function(e){
+//         // Don't perform "swap" if this is the first cache
+//         if (cacheStatusValues[cache.status] != 'idle') {
+//             cache.swapCache();
+//             log('Swapped/updated the Cache Manifest.');
+//         }
+//    }
+// , false);
+
+//  These two functions check for updates to the manifest file
+// function checkForUpdates(){
+//     cache.update();
+// }
+ 
+//function autoCheckForUpdates(){
+//     setInterval(function(){cache.update()}, 10000);
+// }
+
+// return {
+//    isOnline: isOnline,
+//     checkForUpdates: checkForUpdates,
+//     autoCheckForUpdates: autoCheckForUpdates
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</script>
+
+
+
+	</head>  
+
+	<body>  
+
+
+		<div class="online-indicator-red" id="online-indicator" title="Online status indicator"></div>
+
+		<!--           DRUSSA APP PAGE - FOR ALL TO SEE              -->
+		<div data-role="page" id="drussaapp" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+
+				<div data-role="navbar" data-theme="b">
+
+					<ul>
+						<li style=""><a href="#" data-role="button" id="mainlogin">Login</a> </li>
+					</ul>
+
+				</div><!-- /navbar -->
+
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src="http://www.drussa.mobi/images/DRUSSA_App_Banner.png" class="top-logo" class="top-logo" class="top-logo" style="width:230px;cursor:pointer;" onclick="window.open('http://www.drussa.org/index.php?option=com_rccpuser&view=register&lang=en');">
+					<br>
+				</div>	
+
+				<br>
+
+				<div data-xxrole="collapsible-set" data-xxtheme="c" data-xxcontent-theme="d">
+
+					<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+						<h3>Latest from DRUSSA</h3>
+						<div id="newscontent" data-role="collapsible-set"> 
+							<h3>DRUSSA feeds loading...</h3>
+						</div>	
+					</div>
+
+				</div>
+
+				<br><br>
+				
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<a href="http://www.drussa.org" data-rel="external" target="newwin">
+						<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+					</a>
+				</div>
+
+				<br><br>
+
+				<div class="sb" style="height:24px;">
+				</div>
+
+				<br>
+				<br>
+
+				<div style="text-align:center;color:#11467D;font-size:14px;">
+					<!-- <input type="button" value="Login" onclick="window.location='#next';"><br><br>	-->
+					<a href="#copyright" id="linkCopyright">&copy; DRUSSA</a><br><br>
+					<span id="version">Version 0.9 Build 431</span>
+				</div>				
+
+				<br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br>
+
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+
+
+				<div data-role="navbar">
+					<ul>
+						<li><a href="http://www.drussa.org/index.php?option=com_rccpuser&view=register&lang=en" data-role="button" data-ajax="false" data-mini="true">Register to get this App on your desktop, mobile or website</a> </li>
+						<!-- <li><a href="#webcode" data-role="button">Add a link to the Coffee Station</a> </li> -->
+					</ul>
+				</div>
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+		
+		
+		<!-- ------------------------------------- COFFEE STATION ------------------------------------------ -->
+		<div data-role="page" id="coffeestation" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#coffeestation" data-transition="slideup">Home</a></li>
+						<li><a href="#hottopics" data-transition="slideup">Hot Topics</a></li>
+						<li><a href="#toolsandtips" data-transition="slideup">Tools &amp; Tips</a></li>
+					</ul>
+				</div><!-- /navbar -->
+	
+			</div><!-- /header -->
+		
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					Welcome <span  data-bind="text:name"></span> to<br>
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" class="top-logo" style="width:230px;"><br>
+				</div>	
+
+				<br>
+
+				<div data-role="collapsible-set" data-theme="c" data-content-theme="d"> 
+
+					<div id="calendardiv" data-role="collapsible" data-collapsed="true">
+						<h3>Events Calendar</h3>
+						<!-- --------------------- CALENDAR -------------------- -->
+						<div id="calendar" style="">
+						</div>
+						<h3 id="eventtitle"></h3>
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3>Latest from DRUSSA</h3>
+						<div id="drussacontent" data-role="collapsible-set"> 
+							<br><h3>DRUSSA feeds loading...</h3><br>
+						</div>	
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oFeedsContent.render('#twittercontent');">DRUSSA on the Social Networks</h3>
+						<div id="twittercontent" data-role="collapsible-set"> 
+							<img src-"http://www.drussa.mobi/images/wait.gif">
+							<br>
+							<h3>Social feeds loading...</h3>
+						</div>	
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 id="networktitle">DRUSSA Network</h3>
+						<div id="networkcontent" data-role="collapsible-set"> 
+							<br><h3>Network feeds loading...</h3><br>
+						</div>	
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3>DRUSSA Documents</h3>
+						<div id="documentscontent" data-role="collapsible-set"> 
+							<br><h3>Documents loading...</h3><br>
+						</div>	
+					</div>
+
+				</div>
+				
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<a href="http://www.drussa.org" data-rel="external" target="newwin">
+						<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+					</a>
+				</div>
+
+				<br><br> 
+
+				<a href="#webcode" data-role="button" data-mini="true">Get this App on your desktop, mobile or website</a>
+
+				<br><br>
+
+				<div class="sb" style="height:28px;">
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#newsletters" data-transition="slideup">Newsletters</a></li>
+						<li><a href="#fromtheteam" data-transition="slideup">From the Team</a></li>
+						<li><a href="#login" data-transition="slideup" data-ajax="false" onclick="jQuery.jStorage.deleteKey('usr');jQuery.jStorage.deleteKey('pwd');">Log out</a></li>
+					</ul>
+				</div>
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+		<!--  ------------------------------------------- LOGIN ---------------------------------------------- -->
+		<!-- <div data-role="page" id="login" data-theme="b" data-position="fixed"> -->
+		<div data-role="page" id="login" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h1>Login</h1>		
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;margin-bottom:10px;">
+					<img src-"http://www.drussa.mobi/images/DRUSSA_App_Banner.png" class="top-logo" class="top-logo" class="top-logo" style="width:230px;cursor:pointer;" onclick="window.open('http://www.drussa.org/index.php?option=com_rccpuser&view=register&lang=en');">
+				</div>	
+
+				<form id="formLogin" class="ui-body ui-body-b ui-corner-all" method="post">
+
+					<div data-role="fieldcontain" data-theme="c">
+	
+					    	<label for="name">User Name (your email address):</label><br>
+					    	<!-- <input type="email" name="username" id="username" data-bind="value:email" /><br> -->
+					    	<input type="text" name="username" id="username" data-bind="value:username" />
+						<br><br>
+					    	<label for="name">Password:</label><br>
+					    	<input type="password" name="password" id="password"  />
+						<br>
+						<input type="checkbox" name="rememberme" id="rememberme" class="custom" data-mini="true" data-theme="c" checked />
+						<label for="rememberme" " data-mini="true" style="width:170px;font-size:smaller;">Remember me</label>
+
+					</div>
+
+
+
+					<div data-role="controlgroup" data-type="horizontal" style="float:right;font-size:smaller;">
+			    			<div class="ui-block-a"><a href="#drussaapp" id="cancelLogin" data-role="button" data-transition="slide" data-inline="true" data-icon="arrow-l">Back</a></div>
+						<div class="ui-block-b"><input type="button"  id="submitLogin" class="ui-block-a" data-transition="slideup" data-role="button" data-inline="true" data-icon="arrow-r" data-iconpos="right" data-position="right" value="Login"></div>
+					</div>
+					
+
+
+
+					
+
+				</form>
+
+				<div id="notification" style="color:white;padding:20px;">
+					To  visit the Coffee Station you need to be a registered member on the DRUSSA blogsite.
+				</div>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<div style="text-align:center;color:#11467D;font-size:14px;">
+					<a href="#forgot" id="forgotLogin">I forgot my password</a>
+					<br><br>
+					<a href="http://www.drussa.org/index.php?option=com_rccpuser&view=register&lang=en" target="_new">Register on the DRUSSA blogsite</a>
+				</div>				
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>				
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<div data-role="navbar">
+					<ul>
+						<!-- <li><a href="http://drussa.eezydev.co.za/index.php?option=com_rccpuser&view=register&lang=en" data-role="button" data-ajax="false">Get this App on your phone, desktop or website</a> </li> -->
+						<!-- <li><a href="#webcode" data-role="button">Get this App on your phone, desktop or website</a> </li> -->
+					</ul>
+				</div>
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+
+
+		<!-- ------------------------------------- HOT TOPICS ------------------------------------------ -->
+		<div data-role="page" id="hottopics" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#coffeestation" data-transition="slideup">Home</a></li>
+						<li><a href="#hottopics" data-transition="slideup">Hot Topics</a></li>
+						<li><a href="#toolsandtips" data-transition="slideup">Tools &amp; Tips</a></li>
+					</ul>
+				</div><!-- /navbar -->
+	
+			</div><!-- /header -->
+		
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<div data-xxrole="collapsible-set" data-theme="c" data-content-theme="d">
+
+					<div data-role="collapsible" data-collapsed="true" data-theme="d" data-content-theme="d">
+						<h3>Start a New Topic</h3>
+						<div id="newtopiccontent" data-role="collapsible-set"> 
+							<form id="formNewTopic" class="ui-body ui-body-b ui-corner-all" method="post" action="/savecontent.php">
+								<div data-role="fieldcontain">
+								    	<label for="title">Title:</label>
+								    	<textarea name="title" id="title"></textarea>
+								    	<label for="description">Your comments:</label>
+								    	<textarea name="description" id="description" style="height:180px;" data-mini="true"></textarea>
+								</div>
+								<div data-role="controlgroup" data-type="horizontal" style="float:right;font-size:smaller;">
+						    			<!-- div class="ui-block-a"><a href="#hottopics" id="cancelNewTopic" data-role="button" data-transition="slide" data-inline="true" data-icon="arrow-l">Cancel</a></div> -->
+									<div class="ui-block-b"><input type="button"  id="submitNewTopic" class="ui-block-a" data-transition="slideup" data-role="button" data-inline="true" data-icon="arrow-r" data-iconpos="right" data-position="right" value="Submit"></div>
+								</div>
+							</form>
+						</div>	
+					</div>
+
+					<div data-role="collapsible" data-collapsed="false" data-theme="d" data-content-theme="d">
+						<h3>Hot Topics</h3>
+						<div id="hottopicscontent" data-role="collapsible-set"> 
+							<br><h3>HOT TOPICS feeds loading...</h3><br>
+						</div>	
+					</div>
+
+				</div>
+				
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<br><br>
+
+				<div class="sb" style="height:28px;">
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#newsletters" data-transition="slideup">Newsletters</a></li>
+						<li><a href="#fromtheteam" data-transition="slideup">From the Team</a></li>
+						<li><a href="#login" data-transition="slideup" data-ajax="false" onclick="jQuery.jStorage.deleteKey('usr');jQuery.jStorage.deleteKey('pwd');">Log out</a></li>
+ 					</ul>
+				</div>
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+
+		<!-- ------------------------------------- TOOLS AND TIPS ------------------------------------------ -->
+		<div data-role="page" id="toolsandtips" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#coffeestation" data-transition="slideup">Home</a></li>
+						<li><a href="#hottopics" data-transition="slideup">Hot Topics</a></li>
+						<li><a href="#toolsandtips" data-transition="slideup">Tools &amp; Tips</a></li>
+					</ul>
+				</div><!-- /navbar -->
+	
+			</div><!-- /header -->
+		
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<div data-xxrole="collapsible-set" data-theme="c" data-content-theme="d">
+
+					<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+						<h3>Tools &amp; Tips</h3>
+						<div id="toolsandtipscontent" data-role="collapsible-set"> 
+							<br><h3>TOOLS AND TIPS feeds loading...</h3><br>
+						</div>	
+					</div>
+
+				</div>
+				
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<br><br>
+
+				<div class="sb" style="height:28px;">
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#newsletters" data-transition="slideup">Newsletters</a></li>
+						<li><a href="#fromtheteam" data-transition="slideup">From the Team</a></li>
+						<li><a href="#login" data-transition="slideup" data-ajax="false" onclick="jQuery.jStorage.deleteKey('usr');jQuery.jStorage.deleteKey('pwd');">Logout</a></li>
+					</ul>
+				</div>
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+
+		<!-- ------------------------------------- NEWSLETTERS ------------------------------------------ -->
+		<div data-role="page" id="newsletters" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#coffeestation" data-transition="slideup">Home</a></li>
+						<li><a href="#hottopics" data-transition="slideup">Hot Topics</a></li>
+						<li><a href="#toolsandtips" data-transition="slideup">Tools &amp; Tips</a></li>
+					</ul>
+				</div><!-- /navbar -->
+	
+			</div><!-- /header -->
+		
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<div data-xxrole="collapsible-set" data-theme="c" data-content-theme="d">
+
+					<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+						<h3>Newsletters</h3>
+						<div id="newsletterscontent" data-role="collapsible-set"> 
+							<br><h3>NEWSLETTERS feeds loading...</h3><br>
+						</div>	
+					</div>
+
+				</div>
+				
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<br><br>
+
+				<div class="sb" style="height:28px;">
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#newsletters" data-transition="slideup">Newsletters</a></li>
+						<li><a href="#fromtheteam" data-transition="slideup">From the Team</a></li>
+						<li><a href="#login" data-transition="slideup" data-ajax="false" onclick="jQuery.jStorage.deleteKey('usr');jQuery.jStorage.deleteKey('pwd');">Logout</a></li>
+					</ul>
+				</div>
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+		<!-- ------------------------------------- FROM THE TEAM ------------------------------------------ -->
+		<div data-role="page" id="fromtheteam" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#coffeestation" data-transition="slideup">Home</a></li>
+						<li><a href="#hottopics" data-transition="slideup">Hot Topics</a></li>
+						<li><a href="#toolsandtips" data-transition="slideup">Tools &amp; Tips</a></li>
+					</ul>
+				</div><!-- /navbar -->
+	
+			</div><!-- /header -->
+		
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<div data-xxrole="collapsible-set" data-theme="c" data-content-theme="d">
+
+					<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d">
+						<h3>From the Team</h3>
+						<div id="fromtheteamcontent"  data-role="collapsible-set"> 
+							<br><h3>Team news feeds loading...</h3><br>
+						</div>	
+					</div>
+
+				</div>
+				
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">		 		
+				</div>
+
+				<br><br>
+
+				<div class="sb" style="height:28px;">
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#newsletters" data-transition="slideup">Newsletters</a></li>
+						<li><a href="#fromtheteam" data-transition="slideup">From the Team</a></li>
+						<li><a href="#login" data-transition="slideup" data-ajax="false" onclick="jQuery.jStorage.deleteKey('usr');jQuery.jStorage.deleteKey('pwd');">Logout</a></li>
+					</ul>
+				</div> 
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+
+
+
+
+		<!-- SUGGESTIONS -->
+		<div data-role="page" id="suggestions" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+		
+				<div data-role="navbar">
+					<ul>
+							<li><a href="#drussaapp" data-transition="slideup">Continue</a></li>
+					</ul>
+				</div><!-- /navbar -->
+
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+				<h2>Incompatible Browser</h2><br>
+				Your browser is incompatible with the full functionality of the DRUSSA Web App. We suggest you do one of the following:
+				<ul>
+					<li>Upgrade to the latest version of your browser</li>
+					<li>If you are using an older smartphone you can try downloading the latest version of Opera Mobile</li>
+					<li>Click CONTINUE above and you can still use the App in compatibility mode which means that certain functions like offline usage will be disabled</li>
+				</ul>
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#webcode" data-role="button" data-rel="dialog">Link to the Coffee Station on your site</a> </li>
+					</ul>
+				</div>
+
+			</div><!-- /footer -->
+
+		</div><!-- /page --> 
+
+
+
+
+
+
+
+		<!-- COPYRIGHT -->
+		<div data-role="page" id="copyright" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+		
+				<div data-role="navbar">
+					<ul>
+							<li><a href="#login" data-transition="slideup">Login</a></li>
+					</ul>
+				</div><!-- /navbar -->
+
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+				<h2>&copy; DRUSSA</h2><br>
+
+				Content created by DRUSSA and featured on these sites is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike3.0 Unported (CC BY-NC-SA 3.0) licence and may therefore be reproduced free of charge without requiring specific permission. 
+				<br><br>					
+				DRUSSA as a source should be acknowledged as follows: <br>
+				<div style="padding:10px;background-color:#dddddd;">
+					"First published at www.drussa.net/drussa.mobi under the CC BY NC SA 3.0 licence. "
+				</div>	
+				<br>					
+				If you are the owner of any content on this site that may be incorrectly attributed, or published unintentionally without the requisite prior permissions having been obtained, please contact info@drussa.net so that we can correct the attribution or remove the item from our database.
+				<br><br>					
+				Powered by Joomla developed by Perlcom. The basic code for the DRUSSA software was developed as open source; copyright to the additional code written specifically to customise the software belongs to the developers, Perlcom CC.
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+
+
+			<div data-role="footer" data-position="fixed" data-theme="b">
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#drussaapp" data-transition="slideup">Continue</a></li>
+					</ul>
+				</div>
+
+			</div><!-- /footer -->
+		
+		</div><!-- /page -->
+
+
+
+
+
+		<!-- FORGOT -->
+		<div data-role="page" id="forgot" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+		
+				<div data-role="navbar">
+					<ul>
+							<li><a href="#login" data-transition="slideup">Login</a></li>
+					</ul>
+				</div><!-- /navbar -->
+
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<h2>You will need to log in to the live website to reset your password</h2><br>
+				<ul>
+					<li>Click here <a href="http://www.drussa.org/index.php?option=com_user&view=reset" target="_new">to go to the DRUSSA website</a> (note that you need to be online to do this)</li>
+					<li>Enter your email address and click SUBMIT</li>
+					<li>You will be sent a token allowing you to reset your password via email</li>
+					<li>Click LOGIN above to retry logging in.</li>
+				</ul>
+
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+
+			</div><!-- /content -->
+		
+			<div data-role="footer" data-position="fixed" data-theme="b">
+
+				<div data-role="navbar" data-theme="b">
+					<ul>
+						<li><a href="#drussaapp" data-transition="slideup">Continue</a></li>
+					</ul>
+				</div>
+
+			</div><!-- /footer -->
+
+		</div><!-- /page -->
+
+
+
+
+
+		<!-- ADD LINK TO PAGE -->
+		<div data-role="page" id="webcode" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h2>Coffee Station Links</h2>
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<div data-role="collapsible-set" data-theme="c" data-content-theme="d">
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'WEBSITE BANNER LINK');">WEBSITE BANNER LINK</h3>
+						Copy the code below and paste it into your web page:
+						<br><br>
+						<textarea id="coffeestationlink" style="height:220px;"></textarea>
+					</div>
+			
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'IFRAME LINK');">IFRAME LINK</h3>
+						Copy the code below and paste it into your web page:
+						<br><br>
+						<textarea id="coffeestationiframe" style="height:220px;"></textarea>
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'SMARTPHONE LINK');">SMARTPHONE LINK</h3>
+						Use the standard method of adding to HOME page applicable to your phone to create a permanent link on you phone.
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'APP DOWNLOAD');">DOWNLOADED PHONE APP</h3>
+						<a href="https://build.phonegap.com/apps/102312/share" target="_blank">Visit our App Store</a> and select the App apropriate to your phone. 
+						Note that not all phones can run the downloaded app and the downloaded app will not run on your PC.						
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'DESKTOP LINK');">DESKTOP LINK</h3>
+						Drag this link on to your desktop to create a quick link to the Coffee Station:
+						<br><br><br>
+						<div style="text-align:center;">
+							<a href="http://www.drussa.mobi/loader.html" target="_blank" style="background:#fff url(http://www.drussa.mobi/images/coffee.png) no-repeat 10px 10px; border-left:1px solid #663300;border-top:1px solid #663300;border-right:2px solid #663300;border-bottom:2px solid #663300;padding:20px;padding-left:50px;border-radius:10px 10px;" title="Double click to open the MKHAWA Coffee Station">Coffee Station</a>
+						</div>
+						<br><br>
+					</div>
+
+				</div>
+		
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+
+			<div data-role="footer" data-position="fixed" data-theme="b"> 
+				<div data-role="navbar">
+					<ul>
+							<li><a href="#coffeestation" data-transition="slideup">Continue</a></li>
+					</ul>
+				</div><!-- /navbar -->
+			</div><!-- /footer -->
+
+
+		
+		</div><!-- /page -->
+
+
+
+		<!-- ADD LINK TO PAGE -->
+		<div data-role="page" id="webcode2" data-theme="b">
+		
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h2>DRUSSA App Links</h2>
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+
+				<div style="text-align:center;color:#FFFFFF;font-size:larger;text-shadow:-1px -1px gray;font-weight:bold;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" class="top-logo" class="top-logo" style="width:230px;">
+				</div>	
+
+				<div data-role="collapsible-set" data-theme="c" data-content-theme="d">
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'WEBSITE BANNER LINK');">WEBSITE BANNER LINK</h3>
+						Copy the code below and paste it into your web page:
+						<br><br>
+						<textarea id="drussalink2" style="height:220px;"></textarea>
+					</div>
+			
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'IFRAME LINK');">IFRAME LINK</h3>
+						Copy the code below and paste it into your web page:
+						<br><br>
+						<textarea id="drussaiframe2" style="height:220px;"></textarea>
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'SMARTPHONE LINK');">SMARTPHONE LINK</h3>
+						Use the standard method of adding to HOME page applicable to your phone to create a permanent link on you phone.
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'MKHAWA DOWNLOAD');">DOWNLOADED PHONE APP</h3>
+						<a href="https://build.phonegap.com/apps/102312/share" target="_blank">Visit our App Store</a> and select the App apropriate to your phone. 
+						Note that not all phones can run the downloaded app and the downloaded app will not run on your PC.						
+					</div>
+
+					<div data-role="collapsible" data-collapsed="true">
+						<h3 onclick="oLogs.add(thePage,'DESKTOP LINK');">DESKTOP LINK</h3>
+						Drag this link on to your desktop to create a quick link to the DRUSSA App:
+						<br><br><br>
+						<div style="text-align:center;">
+							<!-- <a href="http://www.drussa.mobi/loader.html" target="_blank" style="background:#fff url(/images/sb-drussaapp.jpg) no-repeat 10px 10px; border-left:1px solid #663300;border-top:1px solid #663300;border-right:2px solid #663300;border-bottom:2px solid #663300;padding:20px;padding-left:50px;border-radius:10px 10px;" title="Double click to open the DRUSSA App">DRUSSA App</a> -->
+							<a href="http://www.drussa.mobi/loader.html" target="_blank" style="background:#fff url(http://www.drussa.mobi/images/sb-drussaapp.png) no-repeat 10px 10px; border-left:1px solid skyblue;border-top:1px solid skyblue;border-right:2px solid skyblue;border-bottom:2px solid skyblue;padding:20px;padding-left:50px;border-radius:10px 10px;" title="Double click to open the DRUSSA App">DRUSSA App</a>
+						</div>
+						<br><br>
+					</div>
+
+				</div>
+		
+				<br><br>
+
+				<div style="text-align:center;color:#11467D;font-size:larger;">
+					<img src-"http://www.drussa.mobi/images/drussalogo.png" style="width:100px;">				
+				</div>
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+			</div><!-- /content -->
+
+			<div data-role="footer" data-position="fixed" data-theme="b"> 
+				<div data-role="navbar">
+					<ul>
+							<li><a href="#coffeestation" data-transition="slideup">Continue</a></li>
+					</ul>
+				</div><!-- /navbar -->
+			</div><!-- /footer -->
+
+
+		
+		</div><!-- /page -->
+
+
+
+
+
+
+ 
+
+ 
+	</body>   
+
+</html> 
